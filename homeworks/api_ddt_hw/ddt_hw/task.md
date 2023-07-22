@@ -14,3 +14,22 @@
 3. Соблюдается минимальный кодстайл (встроенный в PyCharm)
 4. В личном кабинете или репозитории приложен файл result.json с итоговым результатом.
 5. Исходные файлы копировать не нужно.
+
+```
+[
+    {
+        "name": "Lolita Lynn",
+        "gender": "female",
+        "address": "389 Neptune Avenue, Belfair, Iowa, 6116",
+        "age": 34,
+        "books": [
+            {
+                "title": "Fundamentals of Wavelets",
+                "author": "Goswami, Jaideva",
+                "pages": 228,
+                "genre": "signal_processing"
+            }
+        ]
+    },
+]
+```
