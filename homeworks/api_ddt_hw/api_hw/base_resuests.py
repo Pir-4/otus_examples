@@ -23,7 +23,7 @@ class BaseRequest:
 
     def _request(self, url, request_type, data=None):
         if request_type == 'GET':
-            response = requests.get(url)
+            response = requests.get(url, params=data)
         elif request_type == 'POST':
             response = requests.post(url, data=data)
         else:
@@ -39,9 +39,9 @@ class BaseRequest:
         pprint.pprint('**********')
         return response
 
-    def get(self, endpoint):
-        url = f'{self.base_url}/{endpoint}'
-        response = self._request(url, 'GET')
+    def get(self, endpoint=None, params=None):
+        url = f'{self.base_url}/{endpoint or ""}'
+        response = self._request(url, 'GET', data=params)
         return self._response_type(response)
 
     # def post(self, endpoint, endpoint_id, body):

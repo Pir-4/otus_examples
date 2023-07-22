@@ -12,7 +12,7 @@ def dog_url():
 
 
 @pytest.fixture(scope='session')
-def openbrewerydb_url_():
+def openbrewerydb_url():
     return 'https://api.openbrewerydb.org/breweries'
 
 
