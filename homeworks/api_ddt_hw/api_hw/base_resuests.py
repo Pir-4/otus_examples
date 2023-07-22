@@ -25,9 +25,13 @@ class BaseRequest:
         if request_type == 'GET':
             response = requests.get(url, params=data)
         elif request_type == 'POST':
-            response = requests.post(url, data=data)
+            response = requests.post(url, json=data)
+        elif request_type == 'PUT':
+            response = requests.put(url, json=data)
         else:
-            response = requests.delete(url)
+            raise NotImplementedError(
+                f'Request type {request_type} is not implemented'
+            )
 
         # log part
         pprint.pprint(f'{request_type} example')
@@ -44,12 +48,12 @@ class BaseRequest:
         response = self._request(url, 'GET', data=params)
         return self._response_type(response)
 
-    # def post(self, endpoint, endpoint_id, body):
-    #     url = f'{self.base_url}/{endpoint}/{endpoint_id}'
-    #     response = self._request(url, 'POST', data=body)
-    #     return response.json()['message']
-    #
-    # def delete(self, endpoint, endpoint_id):
-    #     url = f'{self.base_url}/{endpoint}/{endpoint_id}'
-    #     response = self._request(url, 'DELETE')
-    #     return response.json()['message']
+    def post(self, endpoint, body):
+        url = f'{self.base_url}/{endpoint}'
+        response = self._request(url, 'POST', data=body)
+        return self._response_type(response)
+
+    def put(self, endpoint, body):
+        url = f'{self.base_url}/{endpoint}'
+        response = self._request(url, 'PUT', data=body)
+        return self._response_type(response)
