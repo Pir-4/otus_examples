@@ -24,6 +24,6 @@ some_file = open(TXT_FILE, "r")
 # print(some_file.read(5))
 
 # To open it as writable use r+
-some_file.write("test")
+# some_file.write("test")
 
 some_file.close()
