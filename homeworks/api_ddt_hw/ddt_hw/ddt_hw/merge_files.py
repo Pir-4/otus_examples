@@ -22,10 +22,10 @@ def read_json_file(path_ending):
     return json_result
 
 
-def write_json_file(path_ending, json_data):
+def write_json_file(path_ending, json_data, indent=4):
     full_file_path = get_full_file_path(path_ending)
     with open(full_file_path, "w") as json_file:
-        json_object = json.dumps(json_data)
+        json_object = json.dumps(json_data, indent=indent)
         json_file.write(json_object)
 
 
@@ -47,6 +47,17 @@ def filter_fields_of_list_of_dict(list_of_dict, save_fields):
             if key in save_fields
         }
         result.append(new_book)
+    return result
+
+
+def convert_fields_to_int(list_of_dict, list_of_fields):
+    result = []
+    for dict_item in list_of_dict:
+        tmp_item = {
+            key: int(value) if key in list_of_fields else value
+            for key, value in dict_item.items()
+        }
+        result.append(tmp_item)
     return result
 
 
@@ -72,6 +83,8 @@ if __name__ == '__main__':
     new_books = filter_fields_of_list_of_dict(
         books, ['Title', 'Author', 'Pages', 'Genre']
     )
+
+    new_books = convert_fields_to_int(new_books, ['pages'])
 
     final_users = add_books_to_users(new_books, new_users)
 
