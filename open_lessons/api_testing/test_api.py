@@ -45,7 +45,7 @@ def test_create_post_by_post(posts_url, title, body):
     assert actual_post_info['body'] == body
 
 
-@pytest.mark.parametrize('post_id', [1])
+@pytest.mark.parametrize('post_id', [1], ids=['delete_post_1'])
 def test_delete_post_by_id(posts_url, post_id):
     response = requests.delete(f'{posts_url}/{post_id}')
     assert response.status_code == 200
