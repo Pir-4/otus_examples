@@ -1,8 +1,12 @@
 import pytest
+import os
 
 from .pets_tore_api_user import PetStoreApiUser
 from .gen_params import get_list_of_users, get_list_of_users_from_csv_file
-from .file_utils import USERS_FILE_NAME
+
+
+USERS_FILE_NAME = os.getenv('USERS_FILE_NAME', 'users.csv')
+USERS_ERROR_FILE_NAME = os.getenv('USERS_ERROR_FILE_NAME', 'users_error.csv')
 
 
 @pytest.fixture(scope='function')

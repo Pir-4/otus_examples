@@ -2,9 +2,6 @@ import os
 import csv
 
 
-USERS_FILE_NAME = os.getenv('USERS_FILE_NAME', 'users.csv')
-
-
 def get_full_file_path(path_ending):
     base_path = os.path.dirname(__file__)
     full_file_path = os.path.join(base_path, path_ending)
