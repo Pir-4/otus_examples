@@ -1,6 +1,8 @@
 import requests
 import pprint
 
+BASE_URL_PETSTORE = 'https://petstore.swagger.io/v2'
+
 
 class BaseRequest:
     def __init__(self, base_url):
@@ -55,7 +57,6 @@ class BaseRequest:
 
 
 if __name__ == '__main__':
-    BASE_URL_PETSTORE = 'https://petstore.swagger.io/v2'
     base_request = BaseRequest(BASE_URL_PETSTORE)
 
     pet_info = base_request.get('pet', 1)

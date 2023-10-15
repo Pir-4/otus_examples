@@ -1,18 +1,15 @@
 import pytest
 
-from api_testing.base_request import BaseRequest
-
-BASE_URL_PETSTORE = 'https://petstore.swagger.io/v2'
+from .pets_tore_api_user import PetStoreApiUser
 
 
 @pytest.fixture(scope='function')
 def base_request():
-    return BaseRequest(BASE_URL_PETSTORE)
+    return PetStoreApiUser()
 
 
 def test_create_user(base_request):
     data = {
-        "id": 0,
         "username": "string",
         "firstName": "string",
         "lastName": "string",
@@ -21,5 +18,16 @@ def test_create_user(base_request):
         "phone": "string",
         "userStatus": 0
     }
-    response = base_request.post('user', '', data)
-    assert response['message'] == str(data['id'])
+    user_id = base_request.create_user(**data)
+    assert user_id
+
+    expected_body = {
+        'id': user_id,
+        **data
+    }
+    user_info = base_request.get('user', data['username'])
+    for key, value in expected_body.items():
+        assert user_info[key] == value, (
+            f'[{key}] Actual value: {user_info[key]}, expected: {value}'
+        )
+
