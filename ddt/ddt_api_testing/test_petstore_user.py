@@ -3,7 +3,7 @@ import os
 
 from .pets_tore_api_user import PetStoreApiUser
 from .gen_params import (
-    get_list_of_users, get_list_of_users_from_csv_file,
+    gen_users, get_list_of_users, get_list_of_users_from_csv_file,
     get_param_list_error_users
 )
 
@@ -17,22 +17,14 @@ def pet_store_api_user():
     return PetStoreApiUser()
 
 
-def test_create_user(pet_store_api_user):
-    data = {
-        "username": "string",
-        "firstName": "string",
-        "lastName": "string",
-        "email": "string",
-        "password": "string",
-        "phone": "string",
-        "userStatus": 0
-    }
+@pytest.mark.parametrize('data', gen_users(2))
+def test_create_user(pet_store_api_user, data):
     user_id = pet_store_api_user.create_user(**data)
     assert user_id
 
     expected_body = {
+        **data,
         'id': user_id,
-        **data
     }
     user_info = pet_store_api_user.get('user', data['username'])
     for key, value in expected_body.items():
