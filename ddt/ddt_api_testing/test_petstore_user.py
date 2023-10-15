@@ -37,8 +37,8 @@ def test_create_user(pet_store_api_user, data):
     pytest.param(get_list_of_users(size=5), id='5 users'),
 ])
 def test_create_user_list(pet_store_api_user, list_of_users):
-    response = pet_store_api_user.create_with_list(list_of_users)
-    assert response == 'ok'
+    message = pet_store_api_user.create_with_list(list_of_users)
+    assert message == 'ok'
     for user_info in list_of_users:
         user_name = user_info['username']
         user_info.pop('id')
