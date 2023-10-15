@@ -46,9 +46,15 @@ class BaseRequest:
         response = self._request(url, 'GET', expected_error=expected_error)
         return response.json()
 
-    def post(self, endpoint, endpoint_id, body, is_json=False):
+    def post(
+            self, endpoint, endpoint_id, body, is_json=False,
+            expected_error=False
+    ):
         url = f'{self.base_url}/{endpoint}/{endpoint_id}'
-        response = self._request(url, 'POST', data=body, is_json=is_json)
+        response = self._request(
+            url, 'POST', data=body, is_json=is_json,
+            expected_error=expected_error
+        )
         return response.json()['message']
 
     def delete(self, endpoint, endpoint_id):
@@ -73,5 +79,3 @@ if __name__ == '__main__':
     request_id = base_request.delete('pet', 1)
     pet_info = base_request.get('pet', request_id, expected_error=True)
     pprint.pprint(pet_info)
-
-

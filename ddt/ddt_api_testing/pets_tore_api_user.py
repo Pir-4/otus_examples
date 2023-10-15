@@ -7,10 +7,10 @@ class PetStoreApiUser(BaseRequest):
 
     def create_user(
             self, username, firstName, lastName, email,
-            password, phone, userStatus
+            password, phone, userStatus, id=0, expected_error=False,
     ):
         data = {
-            "id": 0,
+            "id": id,
             "username": username,
             "firstName": firstName,
             "lastName": lastName,
@@ -19,7 +19,9 @@ class PetStoreApiUser(BaseRequest):
             "phone": phone,
             "userStatus": userStatus
         }
-        return self.post('user', '', data, is_json=True)
+        return self.post(
+            'user', '', data, is_json=True, expected_error=expected_error
+        )
 
     def get_user(self, user_name):
         return self.get('user', user_name)

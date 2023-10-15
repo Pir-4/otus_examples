@@ -71,3 +71,21 @@ def test_create_user_array(pet_store_api_user, list_of_users):
             assert user_info[key] == value, (
                 f'[{key}] Actual value: {user_info[key]}, expected: {value}'
             )
+
+
+@pytest.mark.parametrize('user_data',
+        get_list_of_users_from_csv_file(USERS_ERROR_FILE_NAME, 1),
+)
+def test_create_error_user(pet_store_api_user, user_data):
+    user_id = pet_store_api_user.create_user(**user_data, expected_error=True)
+    assert user_id
+
+    # expected_body = {
+    #     'id': user_id,
+    #     **data
+    # }
+    # user_info = pet_store_api_user.get('user', data['username'])
+    # for key, value in expected_body.items():
+    #     assert user_info[key] == value, (
+    #         f'[{key}] Actual value: {user_info[key]}, expected: {value}'
+    #     )
