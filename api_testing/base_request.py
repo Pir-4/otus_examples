@@ -7,13 +7,19 @@ class BaseRequest:
         self.base_url = base_url
         # set headers, authorisation etc
 
-    def _request(self, url, request_type, data=None, expected_error=False):
+    def _request(
+            self, url, request_type, data=None, is_json=False,
+            expected_error=False
+    ):
         stop_flag = False
         while not stop_flag:
             if request_type == 'GET':
                 response = requests.get(url)
             elif request_type == 'POST':
-                response = requests.post(url, data=data)
+                if is_json:
+                    response = requests.post(url, json=data)
+                else:
+                    response = requests.post(url, data=data)
             else:
                 response = requests.delete(url)
 
@@ -37,9 +43,9 @@ class BaseRequest:
         response = self._request(url, 'GET', expected_error=expected_error)
         return response.json()
 
-    def post(self, endpoint, endpoint_id, body):
+    def post(self, endpoint, endpoint_id, body, is_json=False):
         url = f'{self.base_url}/{endpoint}/{endpoint_id}'
-        response = self._request(url, 'POST', data=body)
+        response = self._request(url, 'POST', data=body, is_json=is_json)
         return response.json()['message']
 
     def delete(self, endpoint, endpoint_id):
