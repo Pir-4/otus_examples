@@ -48,3 +48,19 @@ def test_create_user_list(pet_store_api_user, list_of_users):
                 f'[{key}] Actual value: {user_info[key]}, expected: {value}'
             )
 
+
+@pytest.mark.parametrize('list_of_users', [
+    pytest.param(get_list_of_users_from_file(), id='5 users'),
+])
+def test_create_user_array(pet_store_api_user, list_of_users):
+    response = pet_store_api_user.create_with_list(list_of_users)
+    assert response == 'ok'
+    for user_info in list_of_users:
+        user_name = user_info['username']
+        user_info.pop('id')
+        user_info = pet_store_api_user.get('user', user_name)
+        for key, value in user_info.items():
+            assert user_info[key] == value, (
+                f'[{key}] Actual value: {user_info[key]}, expected: {value}'
+            )
+
