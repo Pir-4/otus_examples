@@ -2,7 +2,10 @@ import pytest
 import os
 
 from .pets_tore_api_user import PetStoreApiUser
-from .gen_params import get_list_of_users, get_list_of_users_from_csv_file
+from .gen_params import (
+    get_list_of_users, get_list_of_users_from_csv_file,
+    get_param_list_error_users
+)
 
 
 USERS_FILE_NAME = os.getenv('USERS_FILE_NAME', 'users.csv')
@@ -73,19 +76,9 @@ def test_create_user_array(pet_store_api_user, list_of_users):
             )
 
 
-@pytest.mark.parametrize('user_data',
-        get_list_of_users_from_csv_file(USERS_ERROR_FILE_NAME, 1),
+@pytest.mark.parametrize('user_data, error_message',
+        get_param_list_error_users(USERS_ERROR_FILE_NAME, 3),
 )
-def test_create_error_user(pet_store_api_user, user_data):
-    user_id = pet_store_api_user.create_user(**user_data, expected_error=True)
-    assert user_id
-
-    # expected_body = {
-    #     'id': user_id,
-    #     **data
-    # }
-    # user_info = pet_store_api_user.get('user', data['username'])
-    # for key, value in expected_body.items():
-    #     assert user_info[key] == value, (
-    #         f'[{key}] Actual value: {user_info[key]}, expected: {value}'
-    #     )
+def test_create_error_user(pet_store_api_user, user_data, error_message):
+    err_msg = pet_store_api_user.create_user(**user_data, expected_error=True)
+    assert err_msg == error_message

@@ -26,3 +26,12 @@ def get_list_of_users(size=5):
 
 def get_list_of_users_from_csv_file(file_name, size=5):
     return read_lines_csv_file(file_name, size)
+
+
+def get_param_list_error_users(file_name, size=5):
+    result = []
+    for line in read_lines_csv_file(file_name, size):
+        error_msg = line.pop('errorMessage')
+        result.append((line, error_msg))
+    return result
+
