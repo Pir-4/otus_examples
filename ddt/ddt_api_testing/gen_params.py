@@ -1,6 +1,8 @@
 import random
 import string
 
+from .file_utils import read_lines_csv_file
+
 
 def gen_users(user_count=5):
     for user_id in range(user_count):
@@ -22,5 +24,5 @@ def get_list_of_users(size=5):
     return [user for user in gen_users(size)]
 
 
-def get_list_of_users_from_cv_file(file_path):
-    return []
+def get_list_of_users_from_csv_file(file_name, size=5):
+    return read_lines_csv_file(file_name, size)

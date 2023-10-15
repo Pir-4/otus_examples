@@ -13,6 +13,7 @@ class BaseRequest:
             self, url, request_type, data=None, is_json=False,
             expected_error=False
     ):
+        pprint.pprint(f'Request to: {url}')
         stop_flag = False
         while not stop_flag:
             if request_type == 'GET':

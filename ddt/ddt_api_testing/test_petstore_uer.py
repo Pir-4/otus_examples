@@ -1,7 +1,8 @@
 import pytest
 
 from .pets_tore_api_user import PetStoreApiUser
-from .gen_params import get_list_of_users
+from .gen_params import get_list_of_users, get_list_of_users_from_csv_file
+from .file_utils import USERS_FILE_NAME
 
 
 @pytest.fixture(scope='function')
@@ -50,7 +51,10 @@ def test_create_user_list(pet_store_api_user, list_of_users):
 
 
 @pytest.mark.parametrize('list_of_users', [
-    pytest.param(get_list_of_users_from_file(), id='5 users'),
+    pytest.param(
+        get_list_of_users_from_csv_file(USERS_FILE_NAME, 5),
+        id='5 users from csv file'
+    ),
 ])
 def test_create_user_array(pet_store_api_user, list_of_users):
     response = pet_store_api_user.create_with_list(list_of_users)
@@ -63,4 +67,3 @@ def test_create_user_array(pet_store_api_user, list_of_users):
             assert user_info[key] == value, (
                 f'[{key}] Actual value: {user_info[key]}, expected: {value}'
             )
-
