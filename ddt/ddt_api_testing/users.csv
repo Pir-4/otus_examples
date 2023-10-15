@@ -1,0 +1,5 @@
+id,username,firstName,lastName,email,password,phone,userStatus
+0,username1,firstName1,lastName1,email1,password1,phone1,1
+1,username2,firstName2,lastName2,email2,password2,phone2,0
+2,username3,firstName3,lastName3,email3,password3,phone3,1
+3,username4,firstName4,lastName4,email4,password4,phone4,0
