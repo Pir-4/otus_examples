@@ -21,7 +21,7 @@ def gen_users(user_count=5):
 
 
 def get_list_of_users(size=5):
-    return [user for user in gen_users(size)]
+    return list(gen_users(size))
 
 
 def get_list_of_users_from_csv_file(file_name, size=5):
