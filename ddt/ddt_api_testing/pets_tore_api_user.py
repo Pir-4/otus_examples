@@ -26,9 +26,6 @@ class PetStoreApiUser(BaseRequest):
     def get_user(self, user_name):
         return self.get('user', user_name)
 
-    def delete_user(self, user_name):
-        return self.delete('user', user_name)
-
     def create_with_list(self, list_of_users):
         return self.post(
             'user', 'createWithList', list_of_users, is_json=True
