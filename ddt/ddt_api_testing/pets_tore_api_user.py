@@ -31,3 +31,8 @@ class PetStoreApiUser(BaseRequest):
         return self.post(
             'user', 'createWithList', list_of_users, is_json=True
         )
+
+    def creat_with_array(self, list_of_users):
+        return self.post(
+            'user', 'createWithArray', list_of_users, is_json=True
+        )
