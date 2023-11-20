@@ -13,6 +13,8 @@ print(next(generator))
 print(next(generator))
 print("******")
 
+
+# списочные выражения
 my_tuple = (x ** 2 for x in range(5))
 print(tuple(my_tuple))
 
