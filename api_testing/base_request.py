@@ -10,7 +10,7 @@ class BaseRequest:
         # set headers, authorisation etc
 
     def _request(
-            self, url, request_type, data=None, is_json=False,
+            self, url, request_type, payload=None, is_json=False,
             expected_error=False
     ):
         pprint.pprint(f'Request to: {url}')
@@ -20,9 +20,9 @@ class BaseRequest:
                 response = requests.get(url)
             elif request_type == 'POST':
                 if is_json:
-                    response = requests.post(url, json=data)
+                    response = requests.post(url, json=payload)
                 else:
-                    response = requests.post(url, data=data)
+                    response = requests.post(url, data=payload)
             else:
                 response = requests.delete(url)
 
@@ -52,7 +52,7 @@ class BaseRequest:
     ):
         url = f'{self.base_url}/{endpoint}/{endpoint_id}'
         response = self._request(
-            url, 'POST', data=body, is_json=is_json,
+            url, 'POST', payload=body, is_json=is_json,
             expected_error=expected_error
         )
         return response.json()['message']
