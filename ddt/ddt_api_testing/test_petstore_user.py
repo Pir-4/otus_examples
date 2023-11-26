@@ -42,9 +42,9 @@ def test_create_user_list(pet_store_api_user, list_of_users):
     for user_info in list_of_users:
         user_name = user_info['username']
         user_info.pop('id')
-        user_info = pet_store_api_user.get('user', user_name)
+        user_info_actual = pet_store_api_user.get('user', user_name)
         for key, value in user_info.items():
-            assert user_info[key] == value, (
+            assert user_info_actual[key] == value, (
                 f'[{key}] Actual value: {user_info[key]}, expected: {value}'
             )
 
@@ -61,9 +61,9 @@ def test_create_user_array(pet_store_api_user, list_of_users):
     for user_info in list_of_users:
         user_name = user_info['username']
         user_info.pop('id')
-        user_info = pet_store_api_user.get('user', user_name)
+        user_info_actual = pet_store_api_user.get('user', user_name)
         for key, value in user_info.items():
-            assert user_info[key] == value, (
+            assert user_info_actual[key] == value, (
                 f'[{key}] Actual value: {user_info[key]}, expected: {value}'
             )
 
