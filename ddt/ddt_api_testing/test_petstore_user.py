@@ -1,7 +1,7 @@
 import pytest
 import os
 
-from .pets_tore_api_user import PetStoreApiUser
+from .pets_store_api_user import PetStoreApiUser
 from .gen_params import (
     gen_users, get_list_of_users, get_list_of_users_from_csv_file,
     get_param_list_error_users
