@@ -1,48 +1,92 @@
-import csv, json
+import os
+import json
+import csv
+from copy import deepcopy
 
-from data import USERS_FILE_PATH, BOOKS_FILE_PATH
 
-result = []
+USERS_FILE_NAME = 'users.json'
+BOOKS_FILE_NAME = 'books.csv'
+RESULT_FILE_NAME = 'result.json'
 
-"Создание списка словарей пользователей"
-with open(USERS_FILE_PATH, "r") as u_file:
-    user_file = json.load(u_file)
-    u_list = []
-    for u in user_file:
-        name = u["name"]
-        gender = u["gender"]
-        address = u["address"]
-        age = u["age"]
-        u_item = {"name": name, "gender": gender, "address": address, "age": age}
-        u_list.append(u_item)
 
-"Создание списка словарей книг"
-with open(BOOKS_FILE_PATH, newline='') as b_file:
-    books_file = csv.DictReader(b_file)
-    b_list = []
-    for b in books_file:
-        title = b["Title"]
-        author = b["Author"]
-        pages = b["Pages"]
-        genre = b["Genre"]
-        b_item = {"title": title, "author": author, "pages": pages, "genre": genre}
-        b_list.append(b_item)
+def get_full_file_path(path_ending):
+    base_path = os.getcwd()
+    full_file_path = os.path.join(base_path, path_ending)
+    return full_file_path
 
-"Распределение книг между пользователями"
-x = (len(b_list) // len(u_list))
-a = 0
-b = x
-for i in u_list:
-    if u_list.index(i) < (len(b_list) % len(u_list)):
-        b += 1
-    b_list_user = b_list[a:b]
-    i.update({"books": b_list_user})
-    if b <= len(b_list):
-        a = b
-        b += x
-result.append(u_list)
 
-"Запись в json-файл"
-with open("result.json", "w") as f:
-    s = json.dumps(result, indent=4)
-    f.write(s + "\n")
+def read_json_file(path_ending):
+    full_file_path = get_full_file_path(path_ending)
+    with open(full_file_path, "r") as json_file:
+        json_result = json.load(json_file)
+    return json_result
+
+
+def write_json_file(path_ending, json_data, indent=4):
+    full_file_path = get_full_file_path(path_ending)
+    with open(full_file_path, "w") as json_file:
+        json_object = json.dumps(json_data, indent=indent)
+        json_file.write(json_object)
+
+
+def read_csv_file(path_ending):
+    full_file_path = get_full_file_path(path_ending)
+    csv_result = []
+    with open(full_file_path, "r") as csv_file:
+        rows = csv.DictReader(csv_file)
+        for row in rows:
+            csv_result.append(row)
+    return csv_result
+
+
+def filter_fields_of_list_of_dict(list_of_dict, save_fields):
+    result = []
+    for dict_item in list_of_dict:
+        new_book = {
+            key.lower(): value for key, value in dict_item.items()
+            if key in save_fields
+        }
+        result.append(new_book)
+    return result
+
+
+def convert_fields_to_int(list_of_dict, list_of_fields):
+    result = []
+    for dict_item in list_of_dict:
+        tmp_item = {
+            key: int(value) if key in list_of_fields else value
+            for key, value in dict_item.items()
+        }
+        result.append(tmp_item)
+    return result
+
+
+def add_books_to_users(books, users):
+    result_users = deepcopy(users)
+    list_size = len(users)
+    for index, book in enumerate(books):
+        list_index = index % list_size
+        user = result_users[list_index]
+        if not user.get('books'):
+            user['books'] = []
+        user['books'].append(book)
+    return result_users
+
+
+if __name__ == '__main__':
+    users = read_json_file(USERS_FILE_NAME)
+    books = read_csv_file(BOOKS_FILE_NAME)
+
+    new_users = filter_fields_of_list_of_dict(
+        users, ['name', 'gender', 'address', 'age']
+    )
+    new_books = filter_fields_of_list_of_dict(
+        books, ['Title', 'Author', 'Pages', 'Genre']
+    )
+
+    new_books = convert_fields_to_int(new_books, ['pages'])
+
+    final_users = add_books_to_users(new_books, new_users)
+
+    write_json_file(RESULT_FILE_NAME, final_users)
+    pass
