@@ -14,6 +14,16 @@ class MyNumbers:
             self.n += 1
             return result
 
+
+print('range')
+for i in range(4):
+    print(i)
+
+print('My Iterator')
+for i in MyNumbers(4):
+    print(i)
+
+print('My Iterator. exp2')
 my_numbers = MyNumbers(4)
 my_iter = iter(my_numbers)
 
@@ -23,9 +33,6 @@ while True:
     except StopIteration:
         break
 
+for i in my_iter:
+    print(i)
 
-# for i in my_iter:
-#     print(i)
-
-# for i in MyNumbers(4):
-#     print(i)
