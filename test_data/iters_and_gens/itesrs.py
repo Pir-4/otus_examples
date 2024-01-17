@@ -33,6 +33,7 @@ while True:
     except StopIteration:
         break
 
+print('My Iterator. exp3')
 for i in my_iter:
     print(i)
 
