@@ -1,70 +1,52 @@
 import json
 import csv
 
+from csv import DictReader
+from files import JSON_FILE, JSON_FILE_W
+from files import CSV_FILE
 
-def get_books_from_csv(file_name: str) -> list:
-    books_list = []
-    books_keys = ["Title", "Author", "Pages", "Genre"]
+booksDict = {}
+booksClean = []
 
-    with open(file_name, "r") as csv_file:
-        for row in csv.DictReader(csv_file):
-            data = {key: value for key, value in row.items() if key in books_keys}
-            if "Pages" in data:
-                data["Pages"] = int(data["Pages"])
-            data = {key.lower(): data.pop(key) for key in books_keys}
-            books_list.append(data)
+users = {}
+userClean = []
 
-    return books_list
+key_include_user_columns = {"name", "gender", "address", "age"}
+key_include_books_columns = {"Title", "Author", "Pages", "Genre"}
 
 
-def get_users_from_json(file_name: str) -> list:
-    users_list = []
-    users_keys = ["name", "gender", "address", "age"]
-
-    with open(file_name, "r") as json_file:
-        users_original = json.load(json_file)
-
-    for user in users_original:
-        data = {key: value for key, value in user.items() if key in users_keys}
-        data = {key: data.pop(key) for key in users_keys}
-        users_list.append(data)
-
-    return users_list
+def with_keys(d, keys):
+    return {x: d[x] for x in d if x in keys}
 
 
-def assign_books_to_users(books_list: list, users_list: list) -> list:
-    result_list = []
-    books_per_user = len(books_list) // len(users_list)
-    remaining_books = len(books_list) % len(users_list)
+with open(CSV_FILE, newline="") as f:
+    reader = DictReader(f)
+    booksDict = list(reader)
 
-    for i, user in enumerate(users_list):
-        user_books = books_list[i * books_per_user : (i + 1) * books_per_user]
+for book in booksDict:
+    bookItem = with_keys(book, key_include_books_columns)
+    booksClean.append(bookItem)
 
-        if i < remaining_books:
-            user_books.append(books_list[len(users_list) * books_per_user + i])
-
-        user["books"] = user_books
-        result_list.append(user)
-
-    return result_list
+# print("=== Books ====")
+# for i in booksClean:
+#     print(i)
 
 
-def export_json_to_file(result_list: list) -> None:
-    with open("result.json", "w") as file:
-        json.dump(result_list, file, indent=4)
-        file.write("\n")
+with open(JSON_FILE, "r") as f:
+    userlist = json.loads(f.read())
+    users = list(userlist)
 
 
-def main():
-    json_file_name = "users.json"
-    csv_file_name = "books.csv"
-
-    books_processed = get_books_from_csv(csv_file_name)
-    users_processed = get_users_from_json(json_file_name)
-
-    result = assign_books_to_users(books_processed, users_processed)
-    export_json_to_file(result)
+for user in users:
+    userItem = with_keys(user, key_include_user_columns)
+    userClean.append(userItem)
 
 
-if __name__ == "__main__":
-    main()
+# print("=== Users ====")
+for i in userClean:
+    i.update({"books": [i for i in booksClean]})
+
+
+with open(JSON_FILE_W, "w") as f:
+    s = json.dumps(userClean, indent=4)
+    f.write(s)
